@@ -16,7 +16,7 @@ RUN poetry add uvloop
 
 RUN chgrp -R 0 /app && chmod -R g=u /app
 
-COPY src .
+COPY . .
 
 RUN python manage.py collectstatic --noinput
 

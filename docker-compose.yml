@@ -3,7 +3,7 @@ version: '3.3'
 x-loki-logger: &default-logger
   driver: loki
   options:
-    loki-url: http://147.45.189.115:3100/loki/api/v1/push
+    loki-url: http://79.137.198.134:3100/loki/api/v1/push
     max-size: 200m
     mode: non-blocking
     max-buffer-size: 4m
@@ -29,12 +29,6 @@ services:
       - 8000:8080
     env_file:
       - .env
-    logging:
-      <<: *default-logger
-
-  redis:
-    image: redis:7-alpine
-    restart: on-failure
     logging:
       <<: *default-logger
 
