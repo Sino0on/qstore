@@ -1,0 +1,44 @@
+version: '3.3'
+
+x-loki-logger: &default-logger
+  driver: loki
+  options:
+    loki-url: http://147.45.189.115:3100/loki/api/v1/push
+    max-size: 200m
+    mode: non-blocking
+    max-buffer-size: 4m
+    loki-retries: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    command: -c 'max_connections=500'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+    logging:
+      <<: *default-logger
+  web:
+    build:
+      context: .
+    depends_on:
+      - postgres
+    ports:
+      - 8000:8080
+    env_file:
+      - .env
+    logging:
+      <<: *default-logger
+
+  redis:
+    image: redis:7-alpine
+    restart: on-failure
+    logging:
+      <<: *default-logger
+
+
+
+volumes:
+  postgres:
